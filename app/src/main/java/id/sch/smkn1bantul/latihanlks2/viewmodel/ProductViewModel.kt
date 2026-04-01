@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import id.sch.smkn1bantul.latihanlks2.model.BaseResponse
 import id.sch.smkn1bantul.latihanlks2.model.products.ProductResponse
 import id.sch.smkn1bantul.latihanlks2.network.NetworkResource
 import id.sch.smkn1bantul.latihanlks2.repository.ProductRepository
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 class ProductViewModel(
     private val repository: ProductRepository
 
-): ViewModel() {
+) : ViewModel() {
 
     // List Product
 
@@ -27,5 +28,14 @@ class ProductViewModel(
         _ListProduct.value = NetworkResource.Loading
         _ListProduct.value = repository.getProduct()
 
+    }
+
+    private val _deleteProductResponse = MutableLiveData<NetworkResource<BaseResponse>>()
+
+    val deleteProductResponse: LiveData<NetworkResource<BaseResponse>> = _deleteProductResponse
+
+    fun deleteProduct(id: String) = viewModelScope.launch {
+        _deleteProductResponse.value = NetworkResource.Loading
+        _deleteProductResponse.value = repository.deleteProduct(id)
     }
 }

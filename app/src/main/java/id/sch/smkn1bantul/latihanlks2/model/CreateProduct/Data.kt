@@ -1,13 +1,9 @@
-package id.sch.smkn1bantul.latihanlks2.model.products
+package id.sch.smkn1bantul.latihanlks2.model.CreateProduct
 
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
-
-@Parcelize
-data class Product(
+data class Data(
     @SerializedName("category")
     val category: Category?,
     @SerializedName("description")
@@ -21,5 +17,5 @@ data class Product(
     @SerializedName("name")
     val name: String?,
     @SerializedName("price")
-    val price: Int?
-) : Parcelable
+    val price: String?
+)

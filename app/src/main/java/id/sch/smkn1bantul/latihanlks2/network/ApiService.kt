@@ -1,7 +1,9 @@
 package id.sch.smkn1bantul.latihanlks2.network
 
 import android.content.Context
+import android.media.Image
 import id.sch.smkn1bantul.latihanlks2.local.UserPrefs
+import id.sch.smkn1bantul.latihanlks2.model.BaseResponse
 import id.sch.smkn1bantul.latihanlks2.model.products.ProductResponse
 import id.sch.smkn1bantul.latihanlks2.model.signin.SignInResponse
 import id.sch.smkn1bantul.latihanlks2.model.signup.SignUpResponse
@@ -14,10 +16,12 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -46,14 +50,25 @@ interface ApiService {
     ): SignInResponse
 
     @GET("product")
-    suspend fun  getProduct() : ProductResponse
+    suspend fun getProduct(): ProductResponse
+
+    @FormUrlEncoded
+    @POST("product")
+    suspend fun createProduct(
+        @Field("name") name: String,
+        @Field("category_id") categoryId: Int,
+        @Field("image") image: String,
+        @Field("price") price: String,
+        @Field("description") description: String
+    ): BaseResponse
+
+    @DELETE("product/{id}")
+    suspend fun deleteProduct(
+        @Path("id") id: String
+    ): BaseResponse
 
 
 }
-
-
-
-
 
 
 object Api {
@@ -93,6 +108,7 @@ class AuthInterceptor(
 
         val request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $token")
+            .addHeader("Accept", "application/json")
             .build()
 
         return chain.proceed(request)

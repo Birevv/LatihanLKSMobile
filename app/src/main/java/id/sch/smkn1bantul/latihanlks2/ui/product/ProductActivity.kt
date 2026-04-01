@@ -1,34 +1,27 @@
 package id.sch.smkn1bantul.latihanlks2.ui.product
 
 import android.content.Intent
-import android.content.res.ObbScanner
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.sch.smkn1bantul.latihanapi.adapter.ProductAdapter
-import id.sch.smkn1bantul.latihanlks2.R
 import id.sch.smkn1bantul.latihanlks2.databinding.ActivityProductBinding
 import id.sch.smkn1bantul.latihanlks2.local.UserPrefs
 import id.sch.smkn1bantul.latihanlks2.model.products.Product
 import id.sch.smkn1bantul.latihanlks2.network.NetworkResource
-import id.sch.smkn1bantul.latihanlks2.ui.auth.SignInActivity
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ProductViewModel
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ViewModelFactory
-import kotlinx.coroutines.launch
 
 class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener {
 
     private lateinit var binding: ActivityProductBinding
     private lateinit var productViewModel: ProductViewModel
-    private  lateinit var userPrefs: UserPrefs
+    private lateinit var userPrefs: UserPrefs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +29,11 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBar.appBar)
-        supportActionBar ?.setTitle("List Produk")
+        setSupportActionBar(binding.appBarInclude.appBar)
+        supportActionBar?.setTitle("List Produk")
 
-        productViewModel = ViewModelProvider(this, ViewModelFactory(this))[ProductViewModel::class.java]
+        productViewModel =
+            ViewModelProvider(this, ViewModelFactory(this))[ProductViewModel::class.java]
         loadView()
 
 
@@ -63,6 +57,7 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
 
         productViewModel.getProduct()
 
+
         // Observe Product
 
         productViewModel.ListProduct.observe(this, Observer {
@@ -79,9 +74,11 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
                     adapter.submitList(data)
 
                 }
+
                 is NetworkResource.Error -> {
                     binding.pbLoading.isVisible = false
                 }
+
                 is NetworkResource.Loading -> {
                     binding.pbLoading.isVisible = true
                 }
@@ -91,6 +88,36 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
     }
 
     override fun onProductClicked(item: Product) {
-        // Handle Product Click
+        val intent = Intent(this, DetailedProductActivity::class.java)
+        intent.putExtra("PRODUCT", item)
+        startActivity(intent)
+    }
+
+    override fun onProductDeleted(item: Product) {
+        productViewModel.deleteProduct(item.id.toString())
+
+        productViewModel.deleteProductResponse.observe(this, Observer {
+            val response = it ?: return@Observer
+            when (response) {
+                is NetworkResource.Success -> {
+//                    binding.pbLoading.isVisible = false
+//                    val data = response.data.message
+
+                    // Message Sucssess
+                    Toast.makeText(this, "Product Deleted", Toast.LENGTH_SHORT).show()
+
+                    // Refresh Product
+                    productViewModel.getProduct()
+
+                }
+
+                is NetworkResource.Error -> {
+                    Toast.makeText(this, "Product Not Deleted", Toast.LENGTH_SHORT).show()
+                }
+                is NetworkResource.Loading -> {}
+            }
+
+
+        })
     }
 }

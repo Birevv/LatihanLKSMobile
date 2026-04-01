@@ -10,4 +10,14 @@ class ProductRepository(
     suspend fun getProduct() = safeApiCall {
         api.getProduct()
     }
+
+    suspend fun deleteProduct(id: String) = safeApiCall {
+        api.deleteProduct(id)
+    }
 }
+
+
+//    suspend fun createProduct(name: String, categoryid) = safeApiCall {
+//        api.createProduct()
+//
+//    }
