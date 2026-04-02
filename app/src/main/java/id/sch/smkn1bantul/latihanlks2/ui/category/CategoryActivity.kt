@@ -1,5 +1,6 @@
 package id.sch.smkn1bantul.latihanlks2.ui.category
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import id.sch.smkn1bantul.latihanlks2.adapter.CategoryAdapter
 import id.sch.smkn1bantul.latihanlks2.databinding.ActivityCategoryBinding
 import id.sch.smkn1bantul.latihanlks2.model.products.Category
 import id.sch.smkn1bantul.latihanlks2.network.NetworkResource
+import id.sch.smkn1bantul.latihanlks2.ui.product.CreateProductActivity
 import id.sch.smkn1bantul.latihanlks2.viewmodel.CategoryViewModel
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ViewModelFactory
 
@@ -36,8 +38,17 @@ class CategoryActivity : AppCompatActivity(), CategoryAdapter.CategoryClickListe
         categoryViewModel =
             ViewModelProvider(this, ViewModelFactory(this))[CategoryViewModel::class.java]
         loadView()
+        binding.btnAdd.setOnClickListener {
+            val intent = Intent(this, CreateCategoryActivity::class.java)
+            startActivityForResult(intent, 100)
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            categoryViewModel.getCategory()
+        }
     }
 
     private fun loadView() {
@@ -72,7 +83,6 @@ class CategoryActivity : AppCompatActivity(), CategoryAdapter.CategoryClickListe
     }
 
     override fun onCategoryClicked(item: Category) {
-        TODO("Not yet implemented")
     }
 
     override fun onCategoryDeleted(item: Category) {

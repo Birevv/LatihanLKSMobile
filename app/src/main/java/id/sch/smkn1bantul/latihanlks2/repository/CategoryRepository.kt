@@ -7,7 +7,11 @@ class CategoryRepository(
     private val api: ApiService,
     context: Context,
 ) : BaseRepository(context) {
-    suspend fun  getCategory() = safeApiCall {
+    suspend fun getCategory() = safeApiCall {
         api.getCategory()
+    }
+
+    suspend fun addCategory(name: String) = safeApiCall {
+        api.createCategory(name)
     }
 }

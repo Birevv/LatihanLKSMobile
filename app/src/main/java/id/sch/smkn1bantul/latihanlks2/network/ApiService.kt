@@ -59,7 +59,15 @@ interface ApiService {
 
     // Get Kategori
     @GET("category")
-    suspend fun getCategory() : CategoryResponse
+    suspend fun getCategory(): CategoryResponse
+
+    // Add Kategori
+
+    @FormUrlEncoded
+    @POST("category")
+    suspend fun createCategory(
+        @Field("name") name: String
+    ): BaseResponse
 
     @Multipart
     @POST("product")
@@ -87,8 +95,6 @@ interface ApiService {
     suspend fun deleteProduct(
         @Path("id") id: String
     ): BaseResponse
-
-
 
 
 }
