@@ -7,6 +7,7 @@ import id.sch.smkn1bantul.latihanlks2.model.products.Product
 import id.sch.smkn1bantul.latihanlks2.network.Api
 import id.sch.smkn1bantul.latihanlks2.network.ApiService
 import id.sch.smkn1bantul.latihanlks2.repository.AuthRepository
+import id.sch.smkn1bantul.latihanlks2.repository.CategoryRepository
 import id.sch.smkn1bantul.latihanlks2.repository.ProductRepository
 
 class ViewModelFactory(
@@ -25,7 +26,9 @@ class ViewModelFactory(
                 ProductRepository(Api.build(context), context)
             ) as T
 
-
+            modelClass.isAssignableFrom(CategoryViewModel::class.java) -> CategoryViewModel(
+                CategoryRepository(Api.build(context), context)
+            ) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

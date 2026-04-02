@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.Image
 import id.sch.smkn1bantul.latihanlks2.local.UserPrefs
 import id.sch.smkn1bantul.latihanlks2.model.BaseResponse
+import id.sch.smkn1bantul.latihanlks2.model.category.CategoryResponse
 import id.sch.smkn1bantul.latihanlks2.model.products.ProductResponse
 import id.sch.smkn1bantul.latihanlks2.model.signin.SignInResponse
 import id.sch.smkn1bantul.latihanlks2.model.signup.SignUpResponse
@@ -56,6 +57,10 @@ interface ApiService {
     @GET("product")
     suspend fun getProduct(): ProductResponse
 
+    // Get Kategori
+    @GET("category")
+    suspend fun getCategory() : CategoryResponse
+
     @Multipart
     @POST("product")
     suspend fun createProduct(
@@ -82,6 +87,8 @@ interface ApiService {
     suspend fun deleteProduct(
         @Path("id") id: String
     ): BaseResponse
+
+
 
 
 }

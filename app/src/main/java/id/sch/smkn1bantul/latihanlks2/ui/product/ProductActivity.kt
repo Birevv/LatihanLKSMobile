@@ -21,6 +21,7 @@ import id.sch.smkn1bantul.latihanlks2.local.UserPrefs
 import id.sch.smkn1bantul.latihanlks2.model.products.Product
 import id.sch.smkn1bantul.latihanlks2.network.NetworkResource
 import id.sch.smkn1bantul.latihanlks2.ui.auth.SignInActivity
+import id.sch.smkn1bantul.latihanlks2.ui.category.CategoryActivity
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ProductViewModel
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
@@ -78,8 +79,10 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_setting -> {
-                Toast.makeText(this, "Halo", Toast.LENGTH_SHORT).show()
+            R.id.action_category -> {
+                // Ke Halaman Kategori
+                val intent = Intent(this, CategoryActivity::class.java)
+                startActivity(intent)
                 true
             }
             R.id.action_logout -> {

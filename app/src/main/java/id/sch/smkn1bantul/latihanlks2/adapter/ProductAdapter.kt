@@ -87,7 +87,6 @@ class ProductAdapter(val listener: ProductClickListener?) :
     }
 }
 
-
 class DiffCallback : DiffUtil.ItemCallback<Product>() {
     override fun areItemsTheSame(
         oldItem: Product,

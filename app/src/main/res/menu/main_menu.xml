@@ -9,8 +9,8 @@
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/action_setting"
-        android:title="Settings"
+        android:id="@+id/action_category"
+        android:title="Category"
         />
 
 </menu>
