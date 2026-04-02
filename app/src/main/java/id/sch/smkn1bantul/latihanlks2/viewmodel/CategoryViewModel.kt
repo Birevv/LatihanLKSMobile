@@ -9,6 +9,7 @@ import id.sch.smkn1bantul.latihanlks2.model.category.CategoryResponse
 import id.sch.smkn1bantul.latihanlks2.network.NetworkResource
 import id.sch.smkn1bantul.latihanlks2.repository.CategoryRepository
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 
 class CategoryViewModel(
     private val repository: CategoryRepository
@@ -39,4 +40,13 @@ class CategoryViewModel(
 
     }
 
+    private val _deleteCategoryResponse = MutableLiveData<NetworkResource<BaseResponse>>()
+
+    val deleteCategoryResponse: LiveData<NetworkResource<BaseResponse>> = _deleteCategoryResponse
+
+    fun deleteCategory(id: String) = viewModelScope.launch {
+        _deleteCategoryResponse.value = NetworkResource.Loading
+        _deleteCategoryResponse.value = repository.deleteCategory(id)
+
+    }
 }

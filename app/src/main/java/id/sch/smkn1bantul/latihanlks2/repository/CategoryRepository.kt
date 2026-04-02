@@ -14,4 +14,8 @@ class CategoryRepository(
     suspend fun addCategory(name: String) = safeApiCall {
         api.createCategory(name)
     }
+
+    suspend fun deleteCategory(id: String) = safeApiCall {
+        api.deleteCategory(id)
+    }
 }

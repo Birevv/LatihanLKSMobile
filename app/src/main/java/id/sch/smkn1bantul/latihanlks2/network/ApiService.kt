@@ -69,6 +69,12 @@ interface ApiService {
         @Field("name") name: String
     ): BaseResponse
 
+    // Delete Kategori
+    @DELETE("category/{id}")
+    suspend fun deleteCategory(
+        @Path("id") id: String
+    ): BaseResponse
+
     @Multipart
     @POST("product")
     suspend fun createProduct(

@@ -2,7 +2,9 @@ package id.sch.smkn1bantul.latihanlks2.ui.category
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,6 +45,7 @@ class CategoryActivity : AppCompatActivity(), CategoryAdapter.CategoryClickListe
             startActivityForResult(intent, 100)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -72,9 +75,11 @@ class CategoryActivity : AppCompatActivity(), CategoryAdapter.CategoryClickListe
                     binding.rvCategory.adapter = adapter
                     adapter.submitList(data)
                 }
+
                 is NetworkResource.Loading -> {
                     binding.pbLoading.isVisible = true
                 }
+
                 is NetworkResource.Error -> {
                     binding.pbLoading.isVisible = false
                 }
@@ -86,7 +91,32 @@ class CategoryActivity : AppCompatActivity(), CategoryAdapter.CategoryClickListe
     }
 
     override fun onCategoryDeleted(item: Category) {
-        TODO("Not yet implemented")
+        AlertDialog.Builder(this)
+            .setTitle("Delete Category")
+            .setTitle("Are you sure want to delete this category?")
+            .setPositiveButton("Yes, Deleted", { _, _ ->
+                categoryViewModel.deleteCategory(item.id.toString())
+            })
+            .setNegativeButton("Cancel", null)
+            .show()
+
+        categoryViewModel.deleteCategoryResponse.observe(this, Observer {
+            val response = it ?: return@Observer
+            when (response) {
+                is NetworkResource.Success -> {
+                    Toast.makeText(this, "Category Deleted", Toast.LENGTH_SHORT).show()
+                    categoryViewModel.getCategory()
+                }
+
+                is NetworkResource.Error -> {
+                    Toast.makeText(this, "Category Not Deleted", Toast.LENGTH_SHORT).show()
+                }
+
+                is NetworkResource.Loading -> {}
+            }
+
+        })
+
     }
 
     override fun onCategoryEdited(item: Category) {
