@@ -2,20 +2,28 @@ package id.sch.smkn1bantul.latihanlks2.ui.product
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import id.sch.smkn1bantul.latihanapi.adapter.ProductAdapter
+import id.sch.smkn1bantul.latihanlks2.R
 import id.sch.smkn1bantul.latihanlks2.databinding.ActivityProductBinding
 import id.sch.smkn1bantul.latihanlks2.local.UserPrefs
 import id.sch.smkn1bantul.latihanlks2.model.products.Product
 import id.sch.smkn1bantul.latihanlks2.network.NetworkResource
+import id.sch.smkn1bantul.latihanlks2.ui.auth.SignInActivity
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ProductViewModel
 import id.sch.smkn1bantul.latihanlks2.viewmodel.ViewModelFactory
+import kotlinx.coroutines.launch
 
 class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener {
 
@@ -63,6 +71,43 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_setting -> {
+                Toast.makeText(this, "Halo", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.action_logout -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Logout")
+                    .setMessage("Are you sure want to Logout?")
+                    .setPositiveButton("Yes, Logout", { _, _ ->
+                        lifecycleScope.launch {
+                            userPrefs.clear()
+
+                            val intent = Intent(this@ProductActivity, SignInActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+//
+                        }
+                    })
+
+                    .setNegativeButton("Cancel", null)
+                    .show()
+
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private fun loadView() {
         // Get Product
@@ -107,7 +152,17 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
 
 
     override fun onProductDeleted(item: Product) {
-        productViewModel.deleteProduct(item.id.toString())
+//        productViewModel.deleteProduct(item.id.toString())
+
+        AlertDialog.Builder(this)
+            .setTitle("Delete Product")
+            .setMessage("Are you sure want to delete this product?")
+            .setPositiveButton("Yes, Deleted", { _, _ ->
+                productViewModel.deleteProduct(item.id.toString())
+            })
+            .setNegativeButton("Cancel", null)
+            .show()
+
 
         productViewModel.deleteProductResponse.observe(this, Observer {
             val response = it ?: return@Observer
