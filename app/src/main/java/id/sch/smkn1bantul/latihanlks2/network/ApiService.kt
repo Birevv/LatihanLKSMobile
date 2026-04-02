@@ -25,6 +25,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -73,6 +74,14 @@ interface ApiService {
     @DELETE("category/{id}")
     suspend fun deleteCategory(
         @Path("id") id: String
+    ): BaseResponse
+
+    // Edit Kategori
+    @FormUrlEncoded
+    @PUT("category/{id}")
+    suspend fun editCategory(
+        @Path("id") id: String,
+        @Field("name") name: String
     ): BaseResponse
 
     @Multipart

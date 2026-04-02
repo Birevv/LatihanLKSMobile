@@ -49,4 +49,15 @@ class CategoryViewModel(
         _deleteCategoryResponse.value = repository.deleteCategory(id)
 
     }
+
+    private val _editCategoryResponse = MutableLiveData<NetworkResource<BaseResponse>>()
+
+    val editCategoryResponse: LiveData<NetworkResource<BaseResponse>> = _editCategoryResponse
+
+    fun editCategory(id: String, name: String) = viewModelScope.launch {
+        _editCategoryResponse.value = NetworkResource.Loading
+        _editCategoryResponse.value = repository.editCategory(id, name)
+    }
+
+
 }

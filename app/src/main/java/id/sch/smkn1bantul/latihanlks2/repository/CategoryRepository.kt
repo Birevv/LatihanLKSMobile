@@ -18,4 +18,8 @@ class CategoryRepository(
     suspend fun deleteCategory(id: String) = safeApiCall {
         api.deleteCategory(id)
     }
+
+    suspend fun editCategory(id: String, name: String) = safeApiCall {
+        api.editCategory(id, name)
+    }
 }

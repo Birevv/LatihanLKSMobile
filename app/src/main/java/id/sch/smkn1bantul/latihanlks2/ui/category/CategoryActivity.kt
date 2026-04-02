@@ -120,6 +120,8 @@ class CategoryActivity : AppCompatActivity(), CategoryAdapter.CategoryClickListe
     }
 
     override fun onCategoryEdited(item: Category) {
-        TODO("Not yet implemented")
+        val intent = Intent(this, EditCategoryActivity::class.java)
+        intent.putExtra("CATEGORY", item)
+        startActivityForResult(intent, 100)
     }
 }
