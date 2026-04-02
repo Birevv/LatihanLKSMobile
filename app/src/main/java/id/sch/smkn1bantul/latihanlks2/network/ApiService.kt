@@ -66,6 +66,18 @@ interface ApiService {
         @Part("description") description: RequestBody
     ): BaseResponse
 
+    @Multipart
+    @POST("product/{id}")
+    suspend fun editProduct(
+        @Path("id") id: String,
+        @Part("name") name: RequestBody,
+        @Part("category_id") categoryId: RequestBody,
+        @Part image: MultipartBody.Part,
+        @Part("price") price: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("_method") method: RequestBody
+    ): BaseResponse
+
     @DELETE("product/{id}")
     suspend fun deleteProduct(
         @Path("id") id: String

@@ -38,6 +38,14 @@ class ProductAdapter(val listener: ProductClickListener?) :
                      listener?.onProductDeleted(item)
                  }
              }
+
+            binding.ivEdit.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    listener?.onProductEdited(item)
+                }
+            }
         }
 
         fun bind(item: Product) {
@@ -56,6 +64,8 @@ class ProductAdapter(val listener: ProductClickListener?) :
     interface ProductClickListener {
         fun onProductClicked(item: Product)
         fun onProductDeleted(item: Product)
+
+        fun onProductEdited(item: Product)
     }
 
 

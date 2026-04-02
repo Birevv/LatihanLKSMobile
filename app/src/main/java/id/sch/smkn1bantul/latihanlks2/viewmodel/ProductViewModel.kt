@@ -62,4 +62,30 @@ class ProductViewModel(
 
         )
     }
+
+
+    private val _editProductResponse = MutableLiveData<NetworkResource<BaseResponse>>()
+
+    val editProductResponse: LiveData<NetworkResource<BaseResponse>> = _editProductResponse
+
+
+    fun editProduct(
+        id: String,
+        name: String,
+        categoryId: String,
+        image: MultipartBody.Part,
+        price: String,
+        description: String
+    ) = viewModelScope.launch {
+        _createProductResponse.value = NetworkResource.Loading
+        _createProductResponse.value = repository.editProduct(
+            id,
+            name,
+            categoryId,
+            image,
+            price,
+            description
+
+        )
+    }
 }

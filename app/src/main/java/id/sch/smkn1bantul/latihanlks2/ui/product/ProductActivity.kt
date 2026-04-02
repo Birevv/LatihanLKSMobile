@@ -108,7 +108,7 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
         }
     }
 
-
+//j
     private fun loadView() {
         // Get Product
 
@@ -151,6 +151,8 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
     }
 
 
+
+
     override fun onProductDeleted(item: Product) {
 //        productViewModel.deleteProduct(item.id.toString())
 
@@ -188,5 +190,12 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
 
 
         })
+    }
+
+    override fun onProductEdited(item: Product) {
+        val intent = Intent(this, EditProductActivity::class.java)
+        intent.putExtra("PRODUCT", item)
+        startActivityForResult(intent, 100)
+
     }
 }

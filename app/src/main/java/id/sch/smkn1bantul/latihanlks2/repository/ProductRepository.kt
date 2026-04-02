@@ -34,6 +34,26 @@ class ProductRepository(
         )
 
     }
+    suspend fun editProduct(
+        id: String,
+        name: String,
+        categoryId: String,
+        image: MultipartBody.Part,
+        price: String,
+        description: String
+    ) = safeApiCall {
+        api.editProduct(
+            id,
+            name.toRequestBody(),
+            categoryId.toRequestBody(),
+            image,
+            price.toRequestBody(),
+            description.toRequestBody(),
+            "PUT".toRequestBody()
+
+        )
+
+    }
 }
 
 
