@@ -35,9 +35,12 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
         productViewModel =
             ViewModelProvider(this, ViewModelFactory(this))[ProductViewModel::class.java]
         loadView()
-
-
         userPrefs = UserPrefs(this)
+
+        binding.btnAdd.setOnClickListener {
+            val intent = Intent(this, CreateProductActivity::class.java)
+            startActivityForResult(intent, 100)
+        }
 
         // Logout Button
 //        binding.btnLogout.setOnClickListener {
@@ -51,6 +54,15 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
 //            }
 //        }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            productViewModel.getProduct()
+        }
+    }
+
 
     private fun loadView() {
         // Get Product
@@ -93,6 +105,7 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
         startActivity(intent)
     }
 
+
     override fun onProductDeleted(item: Product) {
         productViewModel.deleteProduct(item.id.toString())
 
@@ -114,6 +127,7 @@ class ProductActivity : AppCompatActivity(), ProductAdapter.ProductClickListener
                 is NetworkResource.Error -> {
                     Toast.makeText(this, "Product Not Deleted", Toast.LENGTH_SHORT).show()
                 }
+
                 is NetworkResource.Loading -> {}
             }
 

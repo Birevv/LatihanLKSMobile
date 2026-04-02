@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Interceptor.*
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -20,7 +22,9 @@ import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
@@ -52,14 +56,14 @@ interface ApiService {
     @GET("product")
     suspend fun getProduct(): ProductResponse
 
-    @FormUrlEncoded
+    @Multipart
     @POST("product")
     suspend fun createProduct(
-        @Field("name") name: String,
-        @Field("category_id") categoryId: Int,
-        @Field("image") image: String,
-        @Field("price") price: String,
-        @Field("description") description: String
+        @Part("name") name: RequestBody,
+        @Part("category_id") categoryId: RequestBody,
+        @Part image: MultipartBody.Part,
+        @Part("price") price: RequestBody,
+        @Part("description") description: RequestBody
     ): BaseResponse
 
     @DELETE("product/{id}")

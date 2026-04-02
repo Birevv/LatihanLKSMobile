@@ -7,9 +7,15 @@ import android.util.Patterns
 import android.widget.EditText
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.NumberFormat
 import java.util.Locale
 
+fun String.toRequestBody(): RequestBody {
+    return this.toRequestBody("text/plain".toMediaType())
+}
 
 fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
